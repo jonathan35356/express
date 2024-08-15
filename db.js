@@ -3,13 +3,13 @@ const mongoose = require("mongoose");
 mongoose
   .connect("mongodb://localhost:27017/admin")
   .then(() => {
-    console.log("Conectado a mongoDB exitosamente");
+    console.log("conexion exitosa a MongoDB");
   })
   .catch((err) => {
-    console.error("Error al conectar a mongoDB");
+    console.error("No se pudo conectar a MongoDB");
   });
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
@@ -18,33 +18,26 @@ const userSchema = mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 const newUser = new User({
-  name: "javier",
-  email: "j.javier2002@protonmail.com",
-  password: "Contraseña!",
+  name: "aracelly",
+  email: "aracelly@gmail.com",
+  password: "aracelly123",
 });
-//Guarda una promesa
+
+
+
 newUser
   .save()
   .then(() => {
-    console.log("Item guardado exitosamente");
+    console.log("item creado");
   })
   .catch((err) => {
-    console.error("Error al guardar el item ", err);
+    console.error("Error", err);
   });
 
-//todo lo que tenga que ver con peticionese
 User.find()
   .then((users) => {
-    console.log("Users", users);
+    console.log(users);
   })
   .catch((err) => {
     console.error(err);
   });
-
-//  newUser de guardar
-//     newUser
-//   .save()//guardamos el objeto
-//   .then(console.log("usuario creado exitosamente"))//por si se guardo correctamente
-//   .catch((err) => {
-//     console.error("Error al crear el usuario", err);
-//   })
