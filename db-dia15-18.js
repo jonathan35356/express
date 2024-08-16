@@ -32,6 +32,21 @@ const newUser = new User({
   email: "pilatoMayor@judas.com",
   password: "Soypilato24/7",
 });
+const update = {
+  name: "benjamin",
+  email: "benjamin@outlook.com",
+  password: "Benjamin123!",
+};
+
+
+const options = { new: true };
+const id = "66be2b51860a739b2e3536b3"
+
+User.findByIdAndUpdate(id,update,options).then(()=>{console.log("Usuario actualizado correctamente")}).
+catch((err)=>{console.error(err);})
+User.findById("66be2b51860a739b2e3536b3").then((user)=>{console.log("Usuario encontrado:",user)}).
+catch((err)=>{console.error(err);})
+
 
 //ejecutamos el metodo de newUser de guardar
 // newUser retorna una promesa ya que es un envio a la base de datos

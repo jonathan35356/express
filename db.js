@@ -23,34 +23,41 @@ const newUser = new User({
   password: "aracelly123",
 });
 
-const id = "66bdf0a1698913fec82cd28e";
-const updated = { name: "andres" };
+const update = {
+  name: "benjamin",
+  email: "benjamin@outlook.com",
+  password: "Benjamin123!",
+};
 const options = { new: true };
+const id = "66be2b51860a739b2e3536b3"
 
-User.findByIdAndDelete(id).then(() => {
-  console.log("Item Eliminado correctamente");
-}).catch((err)=>{console.error("Error al Eliminar el item");})
+User.findByIdAndUpdate(id,update,options).then(()=>{console.log("Usuario actualizado correctamente")}).
+catch((err)=>{console.error(err);})
+User.findById("66be2b51860a739b2e3536b3").then((user)=>{console.log("Usuario encontrado:",user)}).
+catch((err)=>{console.error(err);})
 
-User.findByIdAndUpdate(id, updated, options).then(() => {
-  console.log("Item actualizado correctamente");
-}).catch((err)=>{console.error("Error al actualizar el item");})
+// User.find()
+//   .then((users) => {
+//     console.log(users);
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
 
 
-User.find()
-  .then((users) => {
-    console.log(users);
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+// User.findById(id)
+//   .then((user) => {
+//     console.log("Usuario encontrado:", user);
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
 
-module.exports = { User, newUser };
-
-newUser
-  .save()
-  .then(() => {
-    console.log("item creado");
-  })
-  .catch((err) => {
-    console.error("Error", err);
-  });
+// newUser
+//   .save()
+//   .then(() => {
+//     console.log("item creado");
+//   })
+//   .catch((err) => {
+//     console.error("Error", err);
+//   });
