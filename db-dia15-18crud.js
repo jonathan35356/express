@@ -35,6 +35,13 @@ User.findByIdAndUpdate(id, updated, options).then(() => {
   console.log("Item actualizado correctamente");
 }).catch((err)=>{console.error("Error al actualizar el item");})
 
+User.findById(id)
+  .then((user) => {
+    console.log(user);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 User.find()
   .then((users) => {

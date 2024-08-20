@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
   session({
-    secret: "llave secreta",
+    secret: "superseguro",
     resave: true,
     saveUninitialized: false,
   })
@@ -32,12 +32,12 @@ app.post("/login", (req, res) => {
   res.redirect("/dashboard");
 });
 
-app.get('/dashboard',(req,res)=>{
-  if(!req.session.username){
-    return res.redirect('/login')
+app.get("/dashboard", (req, res) => {
+  if (!req.session.username) {
+    return res.redirect("/login");
   }
-  res.send(`Bienvenido usuario ${req.session.username}`)
-})
+  res.send(`Bienvenido ${req.session.username}`);
+});
 
 app.use((req, res, next) => {
   res

@@ -3,38 +3,59 @@ const mongoose = require("mongoose");
 mongoose
   .connect("mongodb://localhost:27017/admin")
   .then(() => {
-    console.log("conexion exitosa a MongoDB");
+    console.log("conexion exitosa a mongo");
   })
   .catch((err) => {
-    console.error("No se pudo conectar a MongoDB");
+    console.error("No se pudo conectar a mongo", err);
   });
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  password: { type: String, required: true },
+const userSchema = mongoose.Schema({
+  nombre: { type: String, required: true },
+  correo: { type: String, required: true },
 });
 
 const User = mongoose.model("User", userSchema);
 
 const newUser = new User({
-  name: "aracelly",
-  email: "aracelly@gmail.com",
-  password: "aracelly123",
+  nombre: "jonathan",
+  correo: "j.javier200211@outlook.com",
 });
 
-const update = {
-  name: "benjamin",
-  email: "benjamin@outlook.com",
-  password: "Benjamin123!",
-};
+// newUser
+//   .save()
+//   .then(() => {
+//     console.log("Nuevo usuario creado");
+//   })
+//   .catch((err) => {
+//     console.error("No se pudo crear");
+//   });
+const id = "66c482c34497183841b0330e";
+const update = { nombre: "javier2", correo: "aracelly@gmail.com" };
 const options = { new: true };
-const id = "66be2b51860a739b2e3536b3"
 
-User.findByIdAndUpdate(id,update,options).then(()=>{console.log("Usuario actualizado correctamente")}).
-catch((err)=>{console.error(err);})
-User.findById("66be2b51860a739b2e3536b3").then((user)=>{console.log("Usuario encontrado:",user)}).
-catch((err)=>{console.error(err);})
+User.findById(id)
+  .then((user) => {
+    console.log(user);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
+User.findByIdAndUpdate(id, update, options)
+  .then(() => {
+    console.log("Actualizado");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+User.find()
+  .then((users) => {
+    console.log(users);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 // User.find()
 //   .then((users) => {
@@ -43,7 +64,6 @@ catch((err)=>{console.error(err);})
 //   .catch((err) => {
 //     console.error(err);
 //   });
-
 
 // User.findById(id)
 //   .then((user) => {
