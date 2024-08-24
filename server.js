@@ -2,42 +2,52 @@ const express = require("express");
 const morgan = require("morgan"); //datos de la peticion
 const bodyParser = require("body-parser");
 const dataModule = require("./data");
-const session = require("express-session");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+const secret_key = "secretkey";
 
-app.use(
-  session({
-    secret: "llave secreta",
-    resave: true,
-    saveUninitialized: false,
-  })
-);
+app.use(bodyParser.json());
 
-app.get("/login", (req, res) => {
-  res.send(`
-    <form action="/login" method="post">
-      <label>Usuario:</label>
-      <input type="text" name="username" required>
-      <button type="submit">Iniciar Sesión</button>
-    </form>
-  `);
-});
 
-app.post("/login", (req, res) => {
-  const { username } = req.body;
-  req.session.username = username;
-  res.redirect("/dashboard");
-});
-
-app.get('/dashboard',(req,res)=>{
-  if(!req.session.username){
-    return res.redirect('/login')
+const authenticateJWT = (req,res,next)=>{
+  const authHeader = req.headers.authorization;
+  if(authHeader){
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token,secret_key,(err,user)=>{
+      if(err){
+        return res.sendStatus(403);
+      }
+      req.user = user;
+      next()
+    })
+  }else{
+    return res.sendStatus(401)
   }
-  res.send(`Bienvenido usuario ${req.session.username}`)
+
+}
+app.use(authenticateJWT)
+
+app.get('/profile', authenticateJWT, (req, res) => {
+  // El usuario autenticado está disponible en req.user
+  res.json({
+    message: `Este es tu perfil, ${req.user.username}`,
+    user: req.user
+  });
+});
+
+app.post('/login',(req,res)=>{
+  const {username, password} = req.body;
+  if(username === 'admin' && password === 'password'){
+    const token = jwt.sign({username: username},secret_key,{expiresIn: '1h'})
+    res.json({token})
+  }else{
+    res.status(401).json({message: "Credenciales incorrectas"})
+  }
 })
+
+
 
 app.use((req, res, next) => {
   res
