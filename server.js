@@ -12,21 +12,28 @@ app.use(bodyParser.json());
 
 
 const authenticateJWT = (req,res,next)=>{
-  const authHeader = req.headers.authorization;
+  //se busca si el encabezado tiene su authorization con su token valido
+  const authHeader = req.headers.authorization; //GUARDA LA VARIABLE
+  //SI EXISTE EL ENCABEZADO?
   if(authHeader){
+    //LIMPIA EL TOKEN 
     const token = authHeader.split(' ')[1];
+    //VERIFICA SI EL TOKEN TIENE SU LLAVE SECRETA CORRESPONDIENTE Y LUEGO GUARDA EL USUARIO EN REQ.USER
     jwt.verify(token,secret_key,(err,user)=>{
+      //SI HAY ALGUN ERROR TERMINA
       if(err){
         return res.sendStatus(403);
       }
+      //SI NO GUARDA EL USUARIO 
       req.user = user;
+      //EJECUTA EL SIGUIENTE
       next()
     })
   }else{
     return res.sendStatus(401)
   }
-
 }
+//PARA QUE USE ESTE MIDDLEWARE TIENE QUE USARSE EN TODAS LAS
 app.use(authenticateJWT)
 
 app.get('/profile', authenticateJWT, (req, res) => {
